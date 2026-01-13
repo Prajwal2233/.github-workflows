@@ -2,32 +2,31 @@ name: Deploy to Ubuntu Server
 
 on:
   push:
-    branches: ["main"]  # Trigger on push to main branch
+    branches: ["main"]  # deploy on push to main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
-      - name: Checkout code
+      # 1️⃣ Checkout the code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       # 2️⃣ SSH Deploy to Ubuntu Server
       - name: SSH Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.SSH_HOST }}       # now 103.163.182.224
+          username: ${{ secrets.SSH_USER }}   # prajwal
+          key: ${{ secrets.SSH_KEY }}         # private key
           port: 22
           script: |
             echo "Deploying code to Ubuntu server..."
             cd public_html
             git reset --hard HEAD
             git pull origin main
-            # Optional: Install dependencies or restart services
-            # For Node.js:
+            # Optional build commands:
             # npm install
             # npm run build
             # pm2 restart all
